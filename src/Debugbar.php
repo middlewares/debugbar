@@ -63,7 +63,7 @@ class Debugbar implements ServerMiddlewareInterface
         $debugbar = $this->debugbar ?: new StandardDebugBar();
         $renderer = $debugbar->getJavascriptRenderer();
 
-        //Is an asset?
+        //Asset response
         $path = $request->getUri()->getPath();
         $baseUrl = $renderer->getBaseUrl();
 
@@ -89,8 +89,8 @@ class Debugbar implements ServerMiddlewareInterface
 
         //Redirection response
         if (in_array($response->getStatusCode(), [302, 301])) {
-            if ($this->debugBar->isDataPersisted() || session_status() === PHP_SESSION_ACTIVE) {
-                $this->debugBar->stackData();
+            if ($this->debugbar->isDataPersisted() || session_status() === PHP_SESSION_ACTIVE) {
+                $this->debugbar->stackData();
             }
 
             return $response;
