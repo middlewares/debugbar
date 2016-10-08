@@ -1,7 +1,7 @@
 {
     "name": "middlewares/debugbar",
     "type": "library",
-    "description": "Middleware to insert PHP DebugBar automatically in the html responses",
+    "description": "Middleware to insert PHP DebugBar automatically in html responses",
     "license": "MIT",
     "keywords": [
         "psr-7",

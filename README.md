@@ -7,7 +7,7 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 [![SensioLabs Insight][ico-sensiolabs]][link-sensiolabs]
 
-Middleware to insert [PHP DebugBar](http://phpdebugbar.com) automatically in the html response.
+Middleware to insert [PHP DebugBar](http://phpdebugbar.com) automatically in html responses.
 
 **Note:** This middleware is intended for server side only
 
