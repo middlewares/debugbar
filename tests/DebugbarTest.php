@@ -3,9 +3,10 @@
 namespace Middlewares\Tests;
 
 use Middlewares\Debugbar;
+use Middlewares\Utils\Dispatcher;
+use Middlewares\Utils\CallableMiddleware;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\Response;
-use mindplay\middleman\Dispatcher;
 
 class DebugbarTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,10 +29,10 @@ class DebugbarTest extends \PHPUnit_Framework_TestCase
 
         $response = (new Dispatcher([
             (new Debugbar())->captureAjax(),
-            function () use ($contentType) {
+            new CallableMiddleware(function () use ($contentType) {
                 return (new Response())
                     ->withHeader('Content-Type', $contentType);
-            },
+            }),
         ]))->dispatch($request);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
