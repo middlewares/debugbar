@@ -29,13 +29,13 @@ class DebugbarTest extends \PHPUnit_Framework_TestCase
             $request = $request->withHeader($name, $value);
         }
 
-        $response = (new Dispatcher([
+        $response = Dispatcher::run([
             (new Debugbar())->captureAjax(),
             function () use ($contentType) {
                 return Factory::createResponse()
                     ->withHeader('Content-Type', $contentType);
             },
-        ]))->dispatch($request);
+        ], $request);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
 
