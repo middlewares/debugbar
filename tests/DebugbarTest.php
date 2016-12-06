@@ -4,9 +4,7 @@ namespace Middlewares\Tests;
 
 use Middlewares\Debugbar;
 use Middlewares\Utils\Dispatcher;
-use Middlewares\Utils\CallableMiddleware;
-use Zend\Diactoros\ServerRequest;
-use Zend\Diactoros\Response;
+use Middlewares\Utils\Factory;
 
 class DebugbarTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,14 +23,18 @@ class DebugbarTest extends \PHPUnit_Framework_TestCase
      */
     public function testDebugbar($contentType, array $headers, $expectedBody, $expectedHeader)
     {
-        $request = new ServerRequest([], [], '', 'GET', 'php://temp', $headers);
+        $request = Factory::createServerRequest();
+
+        foreach ($headers as $name => $value) {
+            $request = $request->withHeader($name, $value);
+        }
 
         $response = (new Dispatcher([
             (new Debugbar())->captureAjax(),
-            new CallableMiddleware(function () use ($contentType) {
-                return (new Response())
+            function () use ($contentType) {
+                return Factory::createResponse()
                     ->withHeader('Content-Type', $contentType);
-            }),
+            },
         ]))->dispatch($request);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
