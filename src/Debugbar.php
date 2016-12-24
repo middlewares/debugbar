@@ -4,12 +4,12 @@ namespace Middlewares;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
 use DebugBar\DebugBar as Bar;
 use DebugBar\StandardDebugBar;
 
-class Debugbar implements ServerMiddlewareInterface
+class Debugbar implements MiddlewareInterface
 {
     private static $mimes = [
         'css' => 'text/css',
