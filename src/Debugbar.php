@@ -89,8 +89,8 @@ class Debugbar implements MiddlewareInterface
 
         //Redirection response
         if (in_array($response->getStatusCode(), [302, 301])) {
-            if ($this->debugbar->isDataPersisted() || session_status() === PHP_SESSION_ACTIVE) {
-                $this->debugbar->stackData();
+            if ($debugbar->isDataPersisted() || session_status() === PHP_SESSION_ACTIVE) {
+                $debugbar->stackData();
             }
 
             return $response;
