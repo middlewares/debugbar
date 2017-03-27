@@ -33,7 +33,8 @@ class DebugbarTest extends \PHPUnit_Framework_TestCase
             (new Debugbar())->captureAjax(),
             function () use ($contentType) {
                 return Factory::createResponse()
-                    ->withHeader('Content-Type', $contentType);
+                    ->withHeader('Content-Type', $contentType)
+                    ->withHeader('Content-Length', '0');
             },
         ], $request);
 
@@ -52,5 +53,7 @@ class DebugbarTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertFalse($response->hasHeader('phpdebugbar'));
         }
+
+        $this->assertEquals(strlen($body), (int) $response->getHeaderLine('Content-Length'));
     }
 }
