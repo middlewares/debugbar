@@ -8,6 +8,7 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use DebugBar\DebugBar as Bar;
 use DebugBar\StandardDebugBar;
+use Middlewares\Utils\Helpers;
 
 class Debugbar implements MiddlewareInterface
 {
@@ -109,7 +110,7 @@ class Debugbar implements MiddlewareInterface
             $body = Utils\Factory::createStream();
             $body->write($html);
 
-            return $response->withBody($body);
+            return Helpers::fixContentLength($response->withBody($body));
         }
 
         //Ajax response
