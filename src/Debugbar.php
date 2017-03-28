@@ -98,7 +98,7 @@ class Debugbar implements MiddlewareInterface
         }
 
         //Html response
-        if (stripos($response->getHeaderLine('Content-Type'), 'text/html') === 0) {
+        if (stripos($request->getHeaderLine('Accept'), 'text/html') === 0) {
             $html = (string) $response->getBody();
 
             if (!$isAjax) {
