@@ -2,10 +2,10 @@
 
 namespace Middlewares\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Middlewares\Debugbar;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
+use PHPUnit\Framework\TestCase;
 
 class DebugbarTest extends TestCase
 {
@@ -21,6 +21,9 @@ class DebugbarTest extends TestCase
 
     /**
      * @dataProvider debugBarProvider
+     * @param mixed $contentType
+     * @param mixed $expectedBody
+     * @param mixed $expectedHeader
      */
     public function testDebugbar($contentType, array $headers, $expectedBody, $expectedHeader)
     {
