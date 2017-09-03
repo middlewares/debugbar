@@ -102,7 +102,15 @@ class Debugbar implements MiddlewareInterface
             $html = (string) $response->getBody();
 
             if (!$isAjax) {
-                $html = self::injectHtml($html, $renderer->renderHead(), '</head>');
+                ob_start();
+                echo "<style>\n";
+                $renderer->dumpCssAssets();
+                echo "\n</style>";
+                echo "<script>\n";
+                $renderer->dumpJsAssets();
+                echo "\n</script>";
+                $assetCode = ob_get_flush();
+                $html = self::injectHtml($html, $assetCode, '</head>');
             }
 
             $html = self::injectHtml($html, $renderer->render(!$isAjax), '</body>');
