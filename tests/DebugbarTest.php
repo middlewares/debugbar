@@ -42,8 +42,6 @@ class DebugbarTest extends TestCase
             },
         ], $request);
 
-        $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
-
         $body = (string) $response->getBody();
 
         if ($expectedBody) {
@@ -59,5 +57,23 @@ class DebugbarTest extends TestCase
         }
 
         $this->assertEquals(strlen($body), (int) $response->getHeaderLine('Content-Length'));
+    }
+
+    public function testInline()
+    {
+        $response = Dispatcher::run([
+            (new Debugbar())->inline(),
+            function () {
+                echo '<html><head></head><body></body></html>';
+
+                return Factory::createResponse()
+                    ->withHeader('Content-Type', 'text/html');
+            },
+        ]);
+
+        $body = (string) $response->getBody();
+
+        $this->assertNotFalse(strpos($body, '</script>'));
+        $this->assertNotFalse(strpos($body, '</style>'));
     }
 }

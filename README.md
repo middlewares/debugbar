@@ -39,9 +39,13 @@ $response = $dispatcher->dispatch(new ServerRequest());
 
 To use a custom DebugBar instance. If it's not defined, an intance of `DebugBar\StandardDebugBar` will be created.
 
-#### `captureAjax($captureAjax true)`
+#### `captureAjax(bool $captureAjax = true)`
 
 Set true to capture ajax requests and send the data in the headers (disabled by default).
+
+#### `inline(bool $inline = true)`
+
+Set true to dump the js/css code inline in the html.
 
 ---
 

@@ -28,6 +28,11 @@ class Debugbar implements MiddlewareInterface
     private $captureAjax = false;
 
     /**
+     * @var bool Whether dump the css/js code inline in the html
+     */
+    private $inline = false;
+
+    /**
      * Constructor. Set the debug bar.
      *
      * @param Bar|null $debugbar
@@ -47,6 +52,20 @@ class Debugbar implements MiddlewareInterface
     public function captureAjax($captureAjax = true)
     {
         $this->captureAjax = $captureAjax;
+
+        return $this;
+    }
+
+    /**
+     * Configure whether the js/css code should be inserted inline in the html.
+     *
+     * @param bool $inline
+     *
+     * @return self
+     */
+    public function inline($inline = true)
+    {
+        $this->inline = $inline;
 
         return $this;
     }
@@ -102,7 +121,20 @@ class Debugbar implements MiddlewareInterface
             $html = (string) $response->getBody();
 
             if (!$isAjax) {
-                $html = self::injectHtml($html, $renderer->renderHead(), '</head>');
+                if ($this->inline) {
+                    ob_start();
+                    echo "<style>\n";
+                    $renderer->dumpCssAssets();
+                    echo "\n</style>";
+                    echo "<script>\n";
+                    $renderer->dumpJsAssets();
+                    echo "\n</script>";
+                    $code = ob_get_clean();
+                } else {
+                    $code = $renderer->renderHead();
+                }
+
+                $html = self::injectHtml($html, $code, '</head>');
             }
 
             $html = self::injectHtml($html, $renderer->render(!$isAjax), '</body>');

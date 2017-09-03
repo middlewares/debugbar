@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## UNRELEASED
 
+### Added
+
+* New option `inline()` to embed the code inline in the html
+
 ### Changed
 
 * Append `.dist` suffix to phpcs.xml and phpunit.xml files
