@@ -4,8 +4,8 @@ namespace Middlewares;
 
 use DebugBar\DebugBar as Bar;
 use DebugBar\StandardDebugBar;
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Interop\Http\Server\MiddlewareInterface;
+use Interop\Http\Server\RequestHandlerInterface;
 use Middlewares\Utils\Helpers;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -73,12 +73,12 @@ class Debugbar implements MiddlewareInterface
     /**
      * Process a server request and return a response.
      *
-     * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * @param ServerRequestInterface  $request
+     * @param RequestHandlerInterface $handler
      *
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler)
     {
         $debugbar = $this->debugbar ?: new StandardDebugBar();
         $renderer = $debugbar->getJavascriptRenderer();
@@ -103,7 +103,7 @@ class Debugbar implements MiddlewareInterface
             }
         }
 
-        $response = $delegate->process($request);
+        $response = $handler->handle($request);
 
         $isAjax = strtolower($request->getHeaderLine('X-Requested-With')) === 'xmlhttprequest';
 
