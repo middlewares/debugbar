@@ -95,40 +95,12 @@ class Debugbar implements MiddlewareInterface
 
         //Redirection response
         if (in_array($response->getStatusCode(), [302, 301])) {
-            if ($debugbar->isDataPersisted() || session_status() === PHP_SESSION_ACTIVE) {
-                $debugbar->stackData();
-            }
-
-            return $response;
+            return $this->handleRedirect($debugbar, $response);
         }
 
         //Html response
         if (stripos($response->getHeaderLine('Content-Type'), 'text/html') === 0) {
-            $html = (string) $response->getBody();
-
-            if (!$isAjax) {
-                if ($this->inline) {
-                    ob_start();
-                    echo "<style>\n";
-                    $renderer->dumpCssAssets();
-                    echo "\n</style>";
-                    echo "<script>\n";
-                    $renderer->dumpJsAssets();
-                    echo "\n</script>";
-                    $code = ob_get_clean();
-                } else {
-                    $code = $renderer->renderHead();
-                }
-
-                $html = self::injectHtml($html, $code, '</head>');
-            }
-
-            $html = self::injectHtml($html, $renderer->render(!$isAjax), '</body>');
-
-            $body = Utils\Factory::createStream();
-            $body->write($html);
-
-            return Helpers::fixContentLength($response->withBody($body));
+            return $this->handleHtml($debugbar, $response, $isAjax);
         }
 
         //Ajax response
@@ -141,6 +113,51 @@ class Debugbar implements MiddlewareInterface
         }
 
         return $response;
+    }
+
+    /**
+     * Handle redirection responses
+     */
+    private function handleRedirect(Bar $debugbar, ResponseInterface $response): ResponseInterface
+    {
+        if ($debugbar->isDataPersisted() || session_status() === PHP_SESSION_ACTIVE) {
+            $debugbar->stackData();
+        }
+
+        return $response;
+    }
+
+    /**
+     * Handle html responses
+     */
+    private function handleHtml(Bar $debugbar, ResponseInterface $response, bool $isAjax): ResponseInterface
+    {
+        $html = (string) $response->getBody();
+        $renderer = $debugbar->getJavascriptRenderer();
+
+        if (!$isAjax) {
+            if ($this->inline) {
+                ob_start();
+                echo "<style>\n";
+                $renderer->dumpCssAssets();
+                echo "\n</style>";
+                echo "<script>\n";
+                $renderer->dumpJsAssets();
+                echo "\n</script>";
+                $code = ob_get_clean();
+            } else {
+                $code = $renderer->renderHead();
+            }
+
+            $html = self::injectHtml($html, $code, '</head>');
+        }
+
+        $html = self::injectHtml($html, $renderer->render(!$isAjax), '</body>');
+
+        $body = Utils\Factory::createStream();
+        $body->write($html);
+
+        return Helpers::fixContentLength($response->withBody($body));
     }
 
     /**
