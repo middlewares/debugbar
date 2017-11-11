@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Middlewares;
 
@@ -33,9 +34,7 @@ class Debugbar implements MiddlewareInterface
     private $inline = false;
 
     /**
-     * Constructor. Set the debug bar.
-     *
-     * @param Bar|null $debugbar
+     * Set the debug bar.
      */
     public function __construct(Bar $debugbar = null)
     {
@@ -44,12 +43,8 @@ class Debugbar implements MiddlewareInterface
 
     /**
      * Configure whether capture ajax requests to send the data with headers.
-     *
-     * @param bool $captureAjax
-     *
-     * @return self
      */
-    public function captureAjax($captureAjax = true)
+    public function captureAjax(bool $captureAjax = true): self
     {
         $this->captureAjax = $captureAjax;
 
@@ -58,12 +53,8 @@ class Debugbar implements MiddlewareInterface
 
     /**
      * Configure whether the js/css code should be inserted inline in the html.
-     *
-     * @param bool $inline
-     *
-     * @return self
      */
-    public function inline($inline = true)
+    public function inline(bool $inline = true): self
     {
         $this->inline = $inline;
 
@@ -72,13 +63,8 @@ class Debugbar implements MiddlewareInterface
 
     /**
      * Process a server request and return a response.
-     *
-     * @param ServerRequestInterface  $request
-     * @param RequestHandlerInterface $handler
-     *
-     * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $debugbar = $this->debugbar ?: new StandardDebugBar();
         $renderer = $debugbar->getJavascriptRenderer();
@@ -159,14 +145,8 @@ class Debugbar implements MiddlewareInterface
 
     /**
      * Inject html code before a tag.
-     *
-     * @param string $html
-     * @param string $code
-     * @param string $before
-     *
-     * @return ResponseInterface
      */
-    private static function injectHtml($html, $code, $before)
+    private static function injectHtml(string $html, string $code, string $before): string
     {
         $pos = strripos($html, $before);
 
