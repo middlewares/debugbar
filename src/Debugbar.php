@@ -85,7 +85,7 @@ class Debugbar implements MiddlewareInterface
                     return $response->withHeader('Content-Type', self::$mimes[$extension]);
                 }
 
-                return $response;
+                return $response; //@codeCoverageIgnore
             }
         }
 
