@@ -39,7 +39,7 @@
     },
     "scripts": {
         "test": [
-            "phpunit --stderr",
+            "phpunit --stderr --coverage-text",
             "phpcs"
         ],
         "cs-fix": "php-cs-fixer fix .",
