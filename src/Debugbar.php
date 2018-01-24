@@ -5,9 +5,8 @@ namespace Middlewares;
 
 use DebugBar\DebugBar as Bar;
 use DebugBar\StandardDebugBar;
-use Interop\Http\Server\MiddlewareInterface;
-use Interop\Http\Server\RequestHandlerInterface;
-use Middlewares\Utils\Helpers;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -157,7 +156,9 @@ class Debugbar implements MiddlewareInterface
         $body = Utils\Factory::createStream();
         $body->write($html);
 
-        return Helpers::fixContentLength($response->withBody($body));
+        return $response
+            ->withBody($body)
+            ->withoutHeader('Content-Length');
     }
 
     /**
