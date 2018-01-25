@@ -36,8 +36,7 @@ class DebugbarTest extends TestCase
             (new Debugbar())->captureAjax(),
             function () use ($contentType) {
                 return Factory::createResponse()
-                    ->withHeader('Content-Type', $contentType)
-                    ->withHeader('Content-Length', '0');
+                    ->withHeader('Content-Type', $contentType);
             },
         ], $request);
 
@@ -54,8 +53,6 @@ class DebugbarTest extends TestCase
         } else {
             $this->assertFalse($response->hasHeader('phpdebugbar'));
         }
-
-        $this->assertEquals(strlen($body), (int) $response->getHeaderLine('Content-Length'));
     }
 
     public function testInline()
@@ -98,6 +95,9 @@ class DebugbarTest extends TestCase
         $this->assertEquals(file_get_contents($renderer->getBasePath().$file), $body);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testRedirection()
     {
         session_start();
