@@ -47,6 +47,14 @@ Set true to capture ajax requests and send the data in the headers (disabled by 
 
 Set true to dump the js/css code inline in the html.
 
+#### `responseFactory(Psr\Http\Message\ResponseFactoryInterface $responseFactory)`
+
+A PSR-17 factory to create the responses.
+
+#### `streamFactory(Psr\Http\Message\StreamFactoryInterface $streamFactory)`
+
+A PSR-17 factory to create the new response bodies.
+
 ---
 
 Please see [CHANGELOG](CHANGELOG.md) for more information about recent changes and [CONTRIBUTING](CONTRIBUTING.md) for contributing details.

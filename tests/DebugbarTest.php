@@ -26,7 +26,7 @@ class DebugbarTest extends TestCase
      */
     public function testDebugbar(string $contentType, array $headers, bool $expectedBody, bool $expectedHeader)
     {
-        $request = Factory::createServerRequest();
+        $request = Factory::createServerRequest('GET', '/');
 
         foreach ($headers as $name => $value) {
             $request = $request->withHeader($name, $value);
@@ -86,7 +86,7 @@ class DebugbarTest extends TestCase
                     return Factory::createResponse(404);
                 },
             ],
-            Factory::createServerRequest([], 'GET', $renderer->getBaseUrl().$file)
+            Factory::createServerRequest('GET', $renderer->getBaseUrl().$file)
         );
 
         $body = (string) $response->getBody();
@@ -110,7 +110,7 @@ class DebugbarTest extends TestCase
                         ->withHeader('Location', '/new-url');
                 },
             ],
-            Factory::createServerRequest()
+            Factory::createServerRequest('GET', '/')
         );
 
         session_write_close();

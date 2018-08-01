@@ -5,8 +5,10 @@ namespace Middlewares;
 
 use DebugBar\DebugBar as Bar;
 use DebugBar\StandardDebugBar;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -33,11 +35,39 @@ class Debugbar implements MiddlewareInterface
     private $inline = false;
 
     /**
+     * @var ResponseFactoryInterface
+     */
+    private $responseFactory;
+
+    /**
+     * @var StreamFactoryInterface
+     */
+    private $streamFactory;
+
+    /**
      * Set the debug bar.
      */
     public function __construct(Bar $debugbar = null)
     {
         $this->debugbar = $debugbar;
+    }
+
+    /**
+     * Set the response factory used.
+     */
+    public function responseFactory(ResponseFactoryInterface $responseFactory): self
+    {
+        $this->responseFactory = $responseFactory;
+        return $this;
+    }
+
+    /**
+     * Set the stream factory used.
+     */
+    public function streamFactory(StreamFactoryInterface $streamFactory): self
+    {
+        $this->streamFactory = $streamFactory;
+        return $this;
     }
 
     /**
@@ -76,7 +106,8 @@ class Debugbar implements MiddlewareInterface
             $file = $renderer->getBasePath().substr($path, strlen($baseUrl));
 
             if (file_exists($file)) {
-                $response = Utils\Factory::createResponse();
+                $responseFactory = $this->responseFactory ?: Utils\Factory::getResponseFactory();
+                $response = $responseFactory->createResponse();
                 $response->getBody()->write(file_get_contents($file));
                 $extension = pathinfo($file, PATHINFO_EXTENSION);
 
@@ -153,7 +184,9 @@ class Debugbar implements MiddlewareInterface
 
         $html = self::injectHtml($html, $renderer->render(!$isAjax), '</body>');
 
-        $body = Utils\Factory::createStream();
+        $streamFactory = $this->streamFactory ?: Utils\Factory::getStreamFactory();
+
+        $body = $streamFactory->createStream();
         $body->write($html);
 
         return $response
