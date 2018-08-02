@@ -18,7 +18,7 @@
     "require": {
         "php": "^7.0",
         "maximebf/debugbar": "^1.13",
-        "middlewares/utils": "^2.0",
+        "middlewares/utils": "^2.1",
         "psr/http-server-middleware": "^1.0"
     },
     "require-dev": {
