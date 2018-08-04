@@ -53,7 +53,7 @@ A PSR-17 factory to create the responses.
 
 #### `streamFactory(Psr\Http\Message\StreamFactoryInterface $streamFactory)`
 
-A PSR-17 factory to create the new response bodies.
+A PSR-17 factory to create the response bodies.
 
 ---
 

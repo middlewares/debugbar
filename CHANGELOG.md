@@ -9,12 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- New option `responseFactory` to configure a custom factory implementing `Psr\Http\Message\ResponseFactoryInterface`
-- New option `streamFactory` to configure a custom factory implementing `Psr\Http\Message\StreamFactoryInterface`
-
-### Changed
-
-- Upgrade dev dependencies
+- PSR-17 support
+- New option `responseFactory`
+- New option `streamFactory`
 
 ## [1.0.0] - 2018-01-25
 
@@ -84,6 +81,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 First version
 
+
+[1.1.0]: https://github.com/middlewares/debugbar/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/middlewares/debugbar/compare/v0.5.0...v1.0.0
 [0.5.0]: https://github.com/middlewares/debugbar/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/middlewares/debugbar/compare/v0.3.2...v0.4.0
