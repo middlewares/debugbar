@@ -82,7 +82,7 @@ class Debugbar implements MiddlewareInterface
 
             if (file_exists($file)) {
                 $response = $this->createResponse();
-                $response->getBody()->write(file_get_contents($file));
+                $response->getBody()->write((string) file_get_contents($file));
                 $extension = pathinfo($file, PATHINFO_EXTENSION);
 
                 if (isset(self::$mimes[$extension])) {
@@ -148,7 +148,7 @@ class Debugbar implements MiddlewareInterface
                 echo "<script>\n";
                 $renderer->dumpJsAssets();
                 echo "\n</script>";
-                $code = ob_get_clean();
+                $code = (string) ob_get_clean();
             } else {
                 $code = $renderer->renderHead();
             }

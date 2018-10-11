@@ -41,10 +41,10 @@
     "scripts": {
         "test": [
             "phpunit --coverage-text",
-            "phpstan analyse --no-progress --level 7 src",
             "phpcs"
         ],
         "cs-fix": "php-cs-fixer fix .",
-        "coverage": "phpunit --coverage-html=coverage --stderr"
+        "coverage": "phpunit --coverage-html=coverage --stderr",
+        "analyse": "phpstan analyse --no-progress --level 7 src"
     }
 }
