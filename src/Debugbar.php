@@ -7,6 +7,9 @@ use DebugBar\DebugBar as Bar;
 use DebugBar\StandardDebugBar;
 use Middlewares\Utils\Traits\HasResponseFactory;
 use Middlewares\Utils\Traits\HasStreamFactory;
+use Middlewares\Utils\Factory;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -40,9 +43,14 @@ class Debugbar implements MiddlewareInterface
     /**
      * Set the debug bar.
      */
-    public function __construct(Bar $debugbar = null)
-    {
-        $this->debugbar = $debugbar;
+    public function __construct(
+        Bar $debugbar = null,
+        ResponseFactoryInterface $responseFactory = null,
+        StreamFactoryInterface $streamFactory = null
+    ) {
+        $this->debugbar = $debugbar ?: new StandardDebugBar();
+        $this->responseFactory = $responseFactory ?: Factory::getResponseFactory();
+        $this->streamFactory = $streamFactory ?: Factory::getStreamFactory();
     }
 
     /**
@@ -70,8 +78,7 @@ class Debugbar implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $debugbar = $this->debugbar ?: new StandardDebugBar();
-        $renderer = $debugbar->getJavascriptRenderer();
+        $renderer = $this->debugbar->getJavascriptRenderer();
 
         //Asset response
         $path = $request->getUri()->getPath();
@@ -99,17 +106,17 @@ class Debugbar implements MiddlewareInterface
 
         //Redirection response
         if (in_array($response->getStatusCode(), [302, 301])) {
-            return $this->handleRedirect($debugbar, $response);
+            return $this->handleRedirect($response);
         }
 
         //Html response
         if (stripos($response->getHeaderLine('Content-Type'), 'text/html') === 0) {
-            return $this->handleHtml($debugbar, $response, $isAjax);
+            return $this->handleHtml($response, $isAjax);
         }
 
         //Ajax response
         if ($isAjax && $this->captureAjax) {
-            $headers = $debugbar->getDataAsHeaders();
+            $headers = $this->debugbar->getDataAsHeaders();
 
             foreach ($headers as $name => $value) {
                 $response = $response->withHeader($name, $value);
@@ -122,10 +129,10 @@ class Debugbar implements MiddlewareInterface
     /**
      * Handle redirection responses
      */
-    private function handleRedirect(Bar $debugbar, ResponseInterface $response): ResponseInterface
+    private function handleRedirect(ResponseInterface $response): ResponseInterface
     {
-        if ($debugbar->isDataPersisted() || session_status() === PHP_SESSION_ACTIVE) {
-            $debugbar->stackData();
+        if ($this->debugbar->isDataPersisted() || session_status() === PHP_SESSION_ACTIVE) {
+            $this->debugbar->stackData();
         }
 
         return $response;
@@ -134,10 +141,10 @@ class Debugbar implements MiddlewareInterface
     /**
      * Handle html responses
      */
-    private function handleHtml(Bar $debugbar, ResponseInterface $response, bool $isAjax): ResponseInterface
+    private function handleHtml(ResponseInterface $response, bool $isAjax): ResponseInterface
     {
         $html = (string) $response->getBody();
-        $renderer = $debugbar->getJavascriptRenderer();
+        $renderer = $this->debugbar->getJavascriptRenderer();
 
         if (!$isAjax) {
             if ($this->inline) {
