@@ -5,16 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [2.0.0] - 2019-12-01
 
-### Fixed
-
-- Use `phpstan` as a dev dependency to detect bugs
+### Removed
+- Support for PHP 7.0 and 7.1
+- Options `responseFactory` and `streamFactory`. Use the constructor arguments.
 
 ### Added
 
-- Added `responseFactory` option to `__construct`
-- Added `streamFactory` option to `__construct`
+- Added a second argument to the constructor to set a `responseFactory`
+- Added a third argument to the constructor to set a `streamFactory`
 
 ## [1.1.0] - 2018-08-04
 

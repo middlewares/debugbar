@@ -5,14 +5,13 @@
 [![Build Status][ico-travis]][link-travis]
 [![Quality Score][ico-scrutinizer]][link-scrutinizer]
 [![Total Downloads][ico-downloads]][link-downloads]
-[![SensioLabs Insight][ico-sensiolabs]][link-sensiolabs]
 
 Middleware to insert [PHP DebugBar](http://phpdebugbar.com) automatically in html responses.
 
 ## Requirements
 
-* PHP >= 7.0
-* A [PSR-7](https://packagist.org/providers/psr/http-message-implementation) http message implementation ([Diactoros](https://github.com/zendframework/zend-diactoros), [Guzzle](https://github.com/guzzle/psr7), [Slim](https://github.com/slimphp/Slim), etc...)
+* PHP >= 7.2
+* A [PSR-7 http library](https://github.com/middlewares/awesome-psr15-middlewares#psr-7-implementations)
 * A [PSR-15 middleware dispatcher](https://github.com/middlewares/awesome-psr15-middlewares#dispatcher)
 
 ## Installation
@@ -33,27 +32,36 @@ $dispatcher = new Dispatcher([
 $response = $dispatcher->dispatch(new ServerRequest());
 ```
 
-## Options
+## Usage
 
-#### `__construct(DebugBar\DebugBar $debugbar = null)`
+You can provide a `DebugBar\DebugBar` instance to the constructor or an instance of `DebugBar\StandardDebugBar` will be created automatically. Optionally, you can provide a `Psr\Http\Message\ResponseFactoryInterface` and `Psr\Http\Message\StreamFactoryInterface` to create the new responses. If it's not defined, [Middleware\Utils\Factory](https://github.com/middlewares/utils#factory) will be used to detect it automatically.
 
-To use a custom DebugBar instance. If it's not defined, an intance of `DebugBar\StandardDebugBar` will be created.
+```php
+//Create a StandardDebugBar automatically
+$debugbar = new Middlewares\Debugbar();
 
-#### `captureAjax(bool $captureAjax = true)`
+//Use other Debugbar instance
+$debugbar = new Middlewares\Debugbar($myDebugbar);
 
-Set true to capture ajax requests and send the data in the headers (disabled by default).
+//Use other Debugbar instance and PSR-17 factories
+$debugbar = new Middlewares\Debugbar($myDebugbar, $myResponseFactory, $myStreamFactory);
+```
 
-#### `inline(bool $inline = true)`
+### captureAjax
 
-Set true to dump the js/css code inline in the html.
+Use this option to capture ajax requests and send the data in the headers. [More info about AJAX and Stacked data](http://phpdebugbar.com/docs/ajax-and-stack.html#ajax-and-stacked-data). By default it's disabled.
 
-#### `responseFactory(Psr\Http\Message\ResponseFactoryInterface $responseFactory)`
+```php
+$debugbar = (new Middlewares\Debugbar())->captureAjax();
+```
 
-A PSR-17 factory to create the responses.
+### inline
 
-#### `streamFactory(Psr\Http\Message\StreamFactoryInterface $streamFactory)`
+Set true to dump the js/css code inline in the html. This fixes (or mitigate) some issues related with loading the debugbar assets.
 
-A PSR-17 factory to create the response bodies.
+```php
+$debugbar = (new Middlewares\Debugbar())->inline();
+```
 
 ---
 
@@ -66,10 +74,8 @@ The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
 [ico-travis]: https://img.shields.io/travis/middlewares/debugbar/master.svg?style=flat-square
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/g/middlewares/debugbar.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/middlewares/debugbar.svg?style=flat-square
-[ico-sensiolabs]: https://img.shields.io/sensiolabs/i/e84e852f-9ac2-4cd7-9c8b-15021497abca.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/middlewares/debugbar
 [link-travis]: https://travis-ci.org/middlewares/debugbar
 [link-scrutinizer]: https://scrutinizer-ci.com/g/middlewares/debugbar
 [link-downloads]: https://packagist.org/packages/middlewares/debugbar
-[link-sensiolabs]: https://insight.sensiolabs.com/projects/e84e852f-9ac2-4cd7-9c8b-15021497abca

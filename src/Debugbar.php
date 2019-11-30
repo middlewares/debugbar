@@ -5,21 +5,16 @@ namespace Middlewares;
 
 use DebugBar\DebugBar as Bar;
 use DebugBar\StandardDebugBar;
-use Middlewares\Utils\Traits\HasResponseFactory;
-use Middlewares\Utils\Traits\HasStreamFactory;
 use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 class Debugbar implements MiddlewareInterface
 {
-    use HasResponseFactory;
-    use HasStreamFactory;
-
     private static $mimes = [
         'css' => 'text/css',
         'js' => 'text/javascript',
@@ -39,6 +34,16 @@ class Debugbar implements MiddlewareInterface
      * @var bool Whether dump the css/js code inline in the html
      */
     private $inline = false;
+
+    /**
+     * @var ResponseFactoryInterface
+     */
+    private $responseFactory;
+
+    /**
+     * @var StreamFactoryInterface
+     */
+    private $streamFactory;
 
     /**
      * Set the debug bar.
@@ -88,7 +93,7 @@ class Debugbar implements MiddlewareInterface
             $file = $renderer->getBasePath().substr($path, strlen($baseUrl));
 
             if (file_exists($file)) {
-                $response = $this->createResponse();
+                $response = $this->responseFactory->createResponse();
                 $response->getBody()->write((string) file_get_contents($file));
                 $extension = pathinfo($file, PATHINFO_EXTENSION);
 
@@ -165,7 +170,7 @@ class Debugbar implements MiddlewareInterface
 
         $html = self::injectHtml($html, $renderer->render(!$isAjax), '</body>');
 
-        $body = $this->createStream();
+        $body = $this->streamFactory->createStream();
         $body->write($html);
 
         return $response
