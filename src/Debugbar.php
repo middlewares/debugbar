@@ -5,7 +5,6 @@ namespace Middlewares;
 
 use DebugBar\DebugBar as Bar;
 use DebugBar\StandardDebugBar;
-use DebugBar\JavascriptRenderer;
 use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
