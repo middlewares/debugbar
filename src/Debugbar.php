@@ -5,6 +5,7 @@ namespace Middlewares;
 
 use DebugBar\DebugBar as Bar;
 use DebugBar\StandardDebugBar;
+use DebugBar\JavascriptRenderer;
 use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -36,6 +37,11 @@ class Debugbar implements MiddlewareInterface
     private $inline = false;
 
     /**
+     * @var string A rewrite of the root path for the loaded files
+     */
+    private $fileURI = null;
+
+    /**
      * @var ResponseFactoryInterface
      */
     private $responseFactory;
@@ -56,6 +62,16 @@ class Debugbar implements MiddlewareInterface
         $this->debugbar = $debugbar ?: new StandardDebugBar();
         $this->responseFactory = $responseFactory ?: Factory::getResponseFactory();
         $this->streamFactory = $streamFactory ?: Factory::getStreamFactory();
+    }
+
+    /**
+     * Set the roo path variable
+     */
+    public function fileURI(string $fileURI = null): self
+    {
+        $this->fileURI = $fileURI;
+
+        return $this;
     }
 
     /**
@@ -83,7 +99,11 @@ class Debugbar implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+
         $renderer = $this->debugbar->getJavascriptRenderer();
+        if( $this->fileURI ) {
+            $renderer->setOptions( array( 'base_url' => $this->fileURI ) );
+        }
 
         //Asset response
         $path = $request->getUri()->getPath();
