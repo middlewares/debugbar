@@ -117,4 +117,22 @@ class DebugbarTest extends TestCase
 
         $this->assertEquals(302, $response->getStatusCode());
     }
+
+    public function testRenderOptions()
+    {
+        $response = Dispatcher::run(
+            [
+                (new Debugbar())
+                    ->renderOptions(['base_url' => '/custom-url/']),
+                function () {
+                    return Factory::createResponse()
+                        ->withHeader('Content-Type', 'text/html');
+                },
+            ]
+        );
+
+        $body = (string) $response->getBody();
+
+        $this->assertNotFalse(strpos($body, '/custom-url/'));
+    }
 }
