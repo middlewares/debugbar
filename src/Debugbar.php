@@ -36,6 +36,11 @@ class Debugbar implements MiddlewareInterface
     private $inline = false;
 
     /**
+     * @var array A rewrite of the root path for the loaded files
+     */
+    private $renderOptions = null;
+
+    /**
      * @var ResponseFactoryInterface
      */
     private $responseFactory;
@@ -56,6 +61,16 @@ class Debugbar implements MiddlewareInterface
         $this->debugbar = $debugbar ?: new StandardDebugBar();
         $this->responseFactory = $responseFactory ?: Factory::getResponseFactory();
         $this->streamFactory = $streamFactory ?: Factory::getStreamFactory();
+    }
+
+    /**
+     * Set the roo path variable
+     */
+    public function renderOptions(array $renderOptions = null): self
+    {
+        $this->renderOptions = $renderOptions;
+
+        return $this;
     }
 
     /**
@@ -83,7 +98,11 @@ class Debugbar implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+
         $renderer = $this->debugbar->getJavascriptRenderer();
+        if ($this->renderOptions) {
+            $renderer->setOptions($this->renderOptions);
+        }
 
         //Asset response
         $path = $request->getUri()->getPath();
