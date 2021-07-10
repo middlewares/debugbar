@@ -100,8 +100,8 @@ class Debugbar implements MiddlewareInterface
     {
 
         $renderer = $this->debugbar->getJavascriptRenderer();
-        if( $this->renderOptions ) {
-            $renderer->setOptions( $this->renderOptions );
+        if ($this->renderOptions) {
+            $renderer->setOptions($this->renderOptions);
         }
 
         //Asset response
