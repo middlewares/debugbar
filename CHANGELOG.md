@@ -1,9 +1,12 @@
 # Change Log
-
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [2.1.1] - 2024-03-21
+### Fixed
+- Allow middlewares/utils 4.0
 
 ## [2.1.0] - 2021-07-10
 ### Added
@@ -74,11 +77,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Updated to `http-interop/http-middleware#0.3`
 
-## 0.1.0 - 2016-10-08
+## [0.1.0] - 2016-10-08
 First version
 
 [#12]: https://github.com/middlewares/debugbar/issues/12
 
+[2.1.1]: https://github.com/middlewares/debugbar/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/middlewares/debugbar/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/middlewares/debugbar/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/middlewares/debugbar/compare/v1.1.0...v2.0.0
@@ -90,3 +94,4 @@ First version
 [0.3.1]: https://github.com/middlewares/debugbar/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/middlewares/debugbar/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/middlewares/debugbar/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/middlewares/debugbar/releases/tag/v0.1.0
