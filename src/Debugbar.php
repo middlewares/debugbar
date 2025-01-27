@@ -54,9 +54,9 @@ class Debugbar implements MiddlewareInterface
      * Set the debug bar.
      */
     public function __construct(
-        Bar $debugbar = null,
-        ResponseFactoryInterface $responseFactory = null,
-        StreamFactoryInterface $streamFactory = null
+        ?Bar $debugbar = null,
+        ?ResponseFactoryInterface $responseFactory = null,
+        ?StreamFactoryInterface $streamFactory = null
     ) {
         $this->debugbar = $debugbar ?: new StandardDebugBar();
         $this->responseFactory = $responseFactory ?: Factory::getResponseFactory();
@@ -66,7 +66,7 @@ class Debugbar implements MiddlewareInterface
     /**
      * Set the roo path variable
      */
-    public function renderOptions(array $renderOptions = null): self
+    public function renderOptions(?array $renderOptions = null): self
     {
         $this->renderOptions = $renderOptions;
 
