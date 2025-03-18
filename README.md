@@ -63,12 +63,12 @@ $debugbar = (new Middlewares\Debugbar())->inline();
 ```
 ### renderOptions
 
-Use this option to pass  render options to the debugbar as an array. A list of available options can be found at https://github.com/maximebf/php-debugbar/blob/master/src/DebugBar/JavascriptRenderer.php#L132
+Use this option to pass  render options to the debugbar as an array. A list of available options can be found at https://github.com/php-debugbar/php-debugbar/blob/master/src/DebugBar/JavascriptRenderer.php#L132
 
 An example usage would be to pass a new location for the ``base_url`` so that you can rewrite the location of the files needed to render the debug bar. This can be used with symlinks, .htaccess or routes to the files to ensure the debugbar files are accessible.
 
 ```php
-$debugbar = (new Middlewares\Debugbar())->renderOptions(array('base_url' => "/MyProjectsSubDirectory/maximebf/debugbar/"));
+$debugbar = (new Middlewares\Debugbar())->renderOptions(array('base_url' => "/MyProjectsSubDirectory/php-debugbar/php-debugbar/"));
 ```
 ---
 
