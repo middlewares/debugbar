@@ -15,13 +15,16 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class Debugbar implements MiddlewareInterface
 {
+    /**
+     * @var array<string,string>
+     */
     private static $mimes = [
         'css' => 'text/css',
         'js' => 'text/javascript',
     ];
 
     /**
-     * @var Bar|null The debugbar
+     * The debugbar
      */
     private $debugbar;
 
@@ -36,27 +39,25 @@ class Debugbar implements MiddlewareInterface
     private $inline = false;
 
     /**
-     * @var array A rewrite of the root path for the loaded files
+     * @var array<string,string>|null A rewrite of the root path for the loaded files
      */
     private $renderOptions = null;
 
-    /**
-     * @var ResponseFactoryInterface
-     */
     private $responseFactory;
 
-    /**
-     * @var StreamFactoryInterface
-     */
     private $streamFactory;
 
     /**
      * Set the debug bar.
+     *
+     * @param Bar|null                      $debugbar
+     * @param ResponseFactoryInterface|null $responseFactory
+     * @param StreamFactoryInterface|null   $streamFactory
      */
     public function __construct(
-        Bar $debugbar = null,
-        ResponseFactoryInterface $responseFactory = null,
-        StreamFactoryInterface $streamFactory = null
+        ?Bar $debugbar = null,
+        ?ResponseFactoryInterface $responseFactory = null,
+        ?StreamFactoryInterface $streamFactory = null
     ) {
         $this->debugbar = $debugbar ?: new StandardDebugBar();
         $this->responseFactory = $responseFactory ?: Factory::getResponseFactory();
@@ -65,8 +66,10 @@ class Debugbar implements MiddlewareInterface
 
     /**
      * Set the roo path variable
+     *
+     * @param array<string,string> $renderOptions
      */
-    public function renderOptions(array $renderOptions = null): self
+    public function renderOptions(?array $renderOptions = null): self
     {
         $this->renderOptions = $renderOptions;
 
@@ -98,7 +101,6 @@ class Debugbar implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-
         $renderer = $this->debugbar->getJavascriptRenderer();
         if ($this->renderOptions) {
             $renderer->setOptions($this->renderOptions);
