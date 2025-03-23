@@ -17,7 +17,7 @@
     },
     "require": {
         "php": "^7.2 || ^8.0",
-        "maximebf/debugbar": "^1.13",
+        "php-debugbar/php-debugbar": "^1 || ^2",
         "middlewares/utils": "^2 || ^3 || ^4",
         "psr/http-server-middleware": "^1"
     },
