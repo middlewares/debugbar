@@ -11,6 +11,9 @@ use PHPUnit\Framework\TestCase;
 
 class DebugbarTest extends TestCase
 {
+    /**
+     * @return array<array<mixed>>
+     */
     public function debugBarProvider(): array
     {
         return [
@@ -23,8 +26,9 @@ class DebugbarTest extends TestCase
 
     /**
      * @dataProvider debugBarProvider
+     * @param array<string,string> $headers
      */
-    public function testDebugbar(string $contentType, array $headers, bool $expectedBody, bool $expectedHeader)
+    public function testDebugbar(string $contentType, array $headers, bool $expectedBody, bool $expectedHeader): void
     {
         $request = Factory::createServerRequest('GET', '/');
 
@@ -55,7 +59,7 @@ class DebugbarTest extends TestCase
         }
     }
 
-    public function testInline()
+    public function testInline(): void
     {
         $response = Dispatcher::run([
             (new Debugbar())->inline(),
@@ -73,7 +77,7 @@ class DebugbarTest extends TestCase
         $this->assertNotFalse(strpos($body, '</style>'));
     }
 
-    public function testAsset()
+    public function testAsset(): void
     {
         $debugbar = new StandardDebugBar();
         $renderer = $debugbar->getJavascriptRenderer();
@@ -98,7 +102,7 @@ class DebugbarTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    public function testRedirection()
+    public function testRedirection(): void
     {
         session_start();
 
@@ -118,7 +122,7 @@ class DebugbarTest extends TestCase
         $this->assertEquals(302, $response->getStatusCode());
     }
 
-    public function testRenderOptions()
+    public function testRenderOptions(): void
     {
         $response = Dispatcher::run(
             [
