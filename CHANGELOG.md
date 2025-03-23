@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.2.0] - 2025-03-22
 ### Added
-- Support for PHP 8.4
+- Improve support for PHP 8.4 and typying.
 
 ## [2.1.2] - 2025-03-18
 ### Fixed
